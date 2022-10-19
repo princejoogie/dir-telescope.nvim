@@ -11,13 +11,7 @@ local scan = require("plenary.scandir")
 
 local M = {}
 
--- @param opts: table
--- @param opts.title: string
--- @param opts.hidden: boolean
--- @param opts.respect_gitignore: boolean
-M.get_dirs = function(opts)
-	opts = opts or {}
-  opts.title = opts.title or "Select a directory"
+M.get_dirs = function(opts, fn)
 	local data = {}
 	scan.scan_dir(vim.loop.cwd(), {
 		hidden = opts.hidden,
@@ -28,6 +22,8 @@ M.get_dirs = function(opts)
 		end,
 	})
 	table.insert(data, 1, "." .. os_sep)
+
+	local final_dirs = {}
 
 	pickers
 		.new(opts, {
@@ -48,12 +44,14 @@ M.get_dirs = function(opts)
 						end
 					end
 					actions._close(prompt_bufnr, current_picker.initial_mode == "insert")
-          return dirs
+          fn({ search_dirs = dirs })
 				end)
 				return true
 			end,
 		})
 		:find()
+
+	return final_dirs
 end
 
 return M
