@@ -25,7 +25,7 @@ M.get_dirs = function(opts, fn)
 
 	pickers
 		.new(opts, {
-			prompt_title = opts.title,
+			prompt_title = "Select a Directory",
 			finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
 			previewer = conf.file_previewer(opts),
 			sorter = conf.file_sorter(opts),

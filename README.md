@@ -2,6 +2,8 @@
 
 grep or find files in selected directory with telescope
 
+![demo]()
+
 ## Usage
 
 - [packer.nvim](https://github.com/wbthomason/packer.nvim)

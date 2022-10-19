@@ -4,14 +4,12 @@ local grep_in_dir = require("dir-telescope.features.grep-in-dir").GrepInDirector
 local M = {}
 
 -- @param opts: table
--- @param opts.title: string
 -- @param opts.hidden: boolean
 -- @param opts.respect_gitignore: boolean
 M.setup = function(opts)
 	opts = opts or {}
 	opts.hidden = opts.hidden or true
 	opts.respect_gitignore = opts.respect_gitignore or true
-	opts.title = opts.title or "Select a directory"
 
 	M.create_commands(opts)
 end
