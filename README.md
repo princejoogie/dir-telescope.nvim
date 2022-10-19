@@ -2,7 +2,7 @@
 
 grep or find files in selected directory with telescope
 
-![demo]()
+https://user-images.githubusercontent.com/47204120/196644189-ceb442bd-9528-4069-89dc-511ab1c98788.mp4
 
 ## Usage
 
