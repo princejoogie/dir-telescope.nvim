@@ -23,8 +23,6 @@ M.get_dirs = function(opts, fn)
 	})
 	table.insert(data, 1, "." .. os_sep)
 
-	local final_dirs = {}
-
 	pickers
 		.new(opts, {
 			prompt_title = opts.title,
@@ -50,8 +48,6 @@ M.get_dirs = function(opts, fn)
 			end,
 		})
 		:find()
-
-	return final_dirs
 end
 
 return M
