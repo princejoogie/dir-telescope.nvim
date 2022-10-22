@@ -1,5 +1,6 @@
 local find_in_dir = require("dir-telescope.features.find-in-dir").FileInDirectory
 local grep_in_dir = require("dir-telescope.features.grep-in-dir").GrepInDirectory
+local settings = require("dir-telescope.settings")
 
 local M = {}
 
@@ -7,11 +8,11 @@ local M = {}
 -- @param opts.hidden: boolean
 -- @param opts.respect_gitignore: boolean
 M.setup = function(opts)
-	opts = opts or {}
-	opts.hidden = opts.hidden or true
-	opts.respect_gitignore = opts.respect_gitignore or true
+	if opts then
+		settings.set(opts)
+	end
 
-	M.create_commands(opts)
+	M.create_commands(settings.current)
 end
 
 M.create_commands = function(opts)
