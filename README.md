@@ -24,20 +24,46 @@ use({
 
 ## Usage
 
-1. `dir-telescope` creates two user commands `:GrepInDirectory` and `:FileInDirectory` which you can map to any liking you want.
+1. `dir-telescope` can be used in two ways, either as a telescope extension or as user commands.
 2. the commands will open a telescope picker with the list of directories in your current working directory.
 3. you can select a directory by hitting `Enter` or select multiple directories to filter with `Tab`
 4. it will then perform either a `live_grep` or `find_files` on your selected directories
 5. `(tip)`: `<C-q>` will save your queries in a quickfix list. this is the default binding for `telescope.nvim`
 
-### Setting keymaps
+### With Telescope extensions
+
+```lua
+require("telescope").load_extension("dir")
+```
+
+To use the extension simply run `:Telescope dir live_grep` or `:Telescope dir find_files`. These will respect the options you have set during configuration.
+
+#### Setting keymaps for telescope extensions
+
+```lua
+vim.keymap.set("n", "<leader>fd", "<cmd>Telescope dir live_grep<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>pd", "<cmd>Telescope dir find_files<CR>", { noremap = true, silent = true })
+```
+
+#### Programatically call the extension
+
+```lua
+require("telescope").extensions.dir.live_grep()
+require("telescope").extensions.dir.find_files()
+```
+
+### With User commands
+
+`dir-telescope` creates two user commands `:GrepInDirectory` and `:FileInDirectory` which you can map to any liking you want.
+
+#### Setting keymaps for user commands
 
 ```lua
 vim.keymap.set("n", "<leader>fd", "<cmd>GrepInDirectory<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>pd", "<cmd>FileInDirectory<CR>", { noremap = true, silent = true })
 ```
 
-### Contributing
+## Contributing
 
 Intructions for contributing is documented in th [CONTRIBUTING.md](./CONTRIBUTING.md) guide
 
