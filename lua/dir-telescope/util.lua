@@ -42,7 +42,7 @@ M.get_dirs = function(opts, fn)
 						end
 					end
 					actions._close(prompt_bufnr, current_picker.initial_mode == "insert")
-          fn({ search_dirs = dirs })
+					fn({ search_dirs = dirs })
 				end)
 				return true
 			end,
