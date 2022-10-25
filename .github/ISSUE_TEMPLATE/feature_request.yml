@@ -1,0 +1,23 @@
+name: Feature Request
+description: File a feature request
+title: "feat: "
+labels: ["feat", "triage"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+  - type: textarea
+    id: what-you-like
+    attributes:
+      label: What would you like?
+      description: Also tell us notes of how you would want the api design to be
+    validations:
+      required: true
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional notes
+      placeholder: Any additional notes for context
