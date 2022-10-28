@@ -8,10 +8,11 @@ local make_entry = require("telescope.make_entry")
 local os_sep = Path.path.sep
 local pickers = require("telescope.pickers")
 local scan = require("plenary.scandir")
+local async = require("plenary.async")
 
 local M = {}
 
-M.get_dirs = function(opts, fn)
+M.get_dirs_async = function(opts, fn)
 	local data = {}
 	scan.scan_dir(vim.loop.cwd(), {
 		hidden = opts.hidden,
@@ -49,5 +50,9 @@ M.get_dirs = function(opts, fn)
 		})
 		:find()
 end
+
+M.get_dirs = async.run(M.get_dirs_async, function()
+	print("get_dirs Done")
+end)
 
 return M
