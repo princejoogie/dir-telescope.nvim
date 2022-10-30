@@ -11,7 +11,7 @@ local scan = require("plenary.scandir")
 
 local M = {}
 
-M.get_dirs = function(opts, fn)
+M.get_dirs_slow = function(opts, fn)
 	local data = {}
 	scan.scan_dir(vim.loop.cwd(), {
 		hidden = opts.hidden,
@@ -50,7 +50,7 @@ M.get_dirs = function(opts, fn)
 		:find()
 end
 
-M.get_dirs_blazingly_fast = function(opts, fn)
+M.get_dirs = function(opts, fn)
 	local data = vim.fn.systemlist("fd . --type d")
 	table.insert(data, 1, "." .. os_sep)
 
