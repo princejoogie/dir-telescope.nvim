@@ -1,5 +1,4 @@
 local Path = require("plenary.path")
-local a = require("plenary.async")
 local action_set = require("telescope.actions.set")
 local action_state = require("telescope.actions.state")
 local actions = require("telescope.actions")
@@ -13,46 +12,73 @@ local scan = require("plenary.scandir")
 local M = {}
 
 M.get_dirs = function(opts, fn)
-	a.run(function()
-		local data = {}
-		scan.scan_dir(vim.loop.cwd(), {
-			hidden = opts.hidden,
-			only_dirs = true,
-			respect_gitignore = opts.respect_gitignore,
-			on_insert = function(entry)
-				table.insert(data, entry .. os_sep)
+	local data = {}
+	scan.scan_dir(vim.loop.cwd(), {
+		hidden = opts.hidden,
+		only_dirs = true,
+		respect_gitignore = opts.respect_gitignore,
+		on_insert = function(entry)
+			table.insert(data, entry .. os_sep)
+		end,
+	})
+	table.insert(data, 1, "." .. os_sep)
+
+	pickers
+		.new(opts, {
+			prompt_title = "Select a Directory",
+			finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
+			previewer = conf.file_previewer(opts),
+			sorter = conf.file_sorter(opts),
+			attach_mappings = function(prompt_bufnr)
+				action_set.select:replace(function()
+					local current_picker = action_state.get_current_picker(prompt_bufnr)
+					local dirs = {}
+					local selections = current_picker:get_multi_selection()
+					if vim.tbl_isempty(selections) then
+						table.insert(dirs, action_state.get_selected_entry().value)
+					else
+						for _, selection in ipairs(selections) do
+							table.insert(dirs, selection.value)
+						end
+					end
+					actions._close(prompt_bufnr, current_picker.initial_mode == "insert")
+					fn({ search_dirs = dirs })
+				end)
+				return true
 			end,
 		})
-		table.insert(data, 1, "." .. os_sep)
+		:find()
+end
 
-		pickers
-			.new(opts, {
-				prompt_title = "Select a Directory",
-				finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
-				previewer = conf.file_previewer(opts),
-				sorter = conf.file_sorter(opts),
-				attach_mappings = function(prompt_bufnr)
-					action_set.select:replace(function()
-						local current_picker = action_state.get_current_picker(prompt_bufnr)
-						local dirs = {}
-						local selections = current_picker:get_multi_selection()
-						if vim.tbl_isempty(selections) then
-							table.insert(dirs, action_state.get_selected_entry().value)
-						else
-							for _, selection in ipairs(selections) do
-								table.insert(dirs, selection.value)
-							end
+M.get_dirs_blazingly_fast = function(opts, fn)
+	local data = vim.fn.systemlist("fd . --type d")
+	table.insert(data, 1, "." .. os_sep)
+
+	pickers
+		.new(opts, {
+			prompt_title = "Select a Directory",
+			finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
+			previewer = conf.file_previewer(opts),
+			sorter = conf.file_sorter(opts),
+			attach_mappings = function(prompt_bufnr)
+				action_set.select:replace(function()
+					local current_picker = action_state.get_current_picker(prompt_bufnr)
+					local dirs = {}
+					local selections = current_picker:get_multi_selection()
+					if vim.tbl_isempty(selections) then
+						table.insert(dirs, action_state.get_selected_entry().value)
+					else
+						for _, selection in ipairs(selections) do
+							table.insert(dirs, selection.value)
 						end
-						actions._close(prompt_bufnr, current_picker.initial_mode == "insert")
-						fn({ search_dirs = dirs })
-					end)
-					return true
-				end,
-			})
-			:find()
-	end, function()
-		print("get_dirs done")
-	end)
+					end
+					actions._close(prompt_bufnr, current_picker.initial_mode == "insert")
+					fn({ search_dirs = dirs })
+				end)
+				return true
+			end,
+		})
+		:find()
 end
 
 return M

@@ -1,5 +1,5 @@
 local builtin = require("telescope.builtin")
-local get_dirs = require("dir-telescope.util").get_dirs_blazingly_fast
+local get_dirs = require("dir-telescope.util").get_dirs
 
 local M = {}
 
