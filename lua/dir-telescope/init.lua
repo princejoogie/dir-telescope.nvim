@@ -9,6 +9,7 @@ local M = {}
 -- @param opts: table
 -- @param opts.hidden: boolean
 -- @param opts.respect_gitignore: boolean
+-- @param opts.debug : boolean
 M.setup = function(opts)
 	if opts then
 		settings.set(opts)
