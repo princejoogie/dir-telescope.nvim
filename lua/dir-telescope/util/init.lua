@@ -8,10 +8,15 @@ local make_entry = require("telescope.make_entry")
 local os_sep = Path.path.sep
 local pickers = require("telescope.pickers")
 local scan = require("plenary.scandir")
+local time = require("dir-telescope.util.time")
 
 local M = {}
 
 M.get_dirs_slow = function(opts, fn)
+	if opts.debug then
+		time.time_start("get_dirs_slow")
+	end
+
 	local data = {}
 	scan.scan_dir(vim.loop.cwd(), {
 		hidden = opts.hidden,
@@ -48,9 +53,17 @@ M.get_dirs_slow = function(opts, fn)
 			end,
 		})
 		:find()
+
+	if opts.debug then
+		print("get_dirs_slow took " .. time.time_end("get_dirs_slow") .. " seconds")
+	end
 end
 
 M.get_dirs = function(opts, fn)
+	if opts.debug then
+		time.time_start("get_dirs")
+	end
+
 	local find_command = (function()
 		if opts.find_command then
 			if type(opts.find_command) == "function" then
@@ -127,6 +140,10 @@ M.get_dirs = function(opts, fn)
 						end,
 					})
 					:find()
+
+				if opts.debug then
+					print("get_dirs took " .. time.time_end("get_dirs") .. " seconds")
+				end
 			else
 				vim.notify("No directories found", vim.log.levels.ERROR)
 			end

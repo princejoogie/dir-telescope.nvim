@@ -34,13 +34,13 @@ M.create_commands = function(opts)
 	vim.api.nvim_create_user_command("GrepInDirectorySlow", function()
 		grep_in_dir_slow(opts)
 	end, {
-		desc = "Live grep in selected directory",
+		desc = "Live grep in selected directory (Slow)",
 	})
 
 	vim.api.nvim_create_user_command("FileInDirectorySlow", function()
 		find_in_dir_slow(opts)
 	end, {
-		desc = "Find files in selected directory",
+		desc = "Find files in selected directory (Slow)",
 	})
 end
 
