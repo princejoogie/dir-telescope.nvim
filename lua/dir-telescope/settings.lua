@@ -2,6 +2,7 @@ local M = {}
 
 local DEFAULT_SETTINGS = {
 	hidden = true,
+	debug = false,
 	respect_gitignore = true,
 }
 
@@ -12,6 +13,7 @@ M.set = function(opts)
 	M.current = vim.tbl_deep_extend("force", M.current, opts)
 	vim.validate({
 		hidden = { M.current.hidden, "boolean", true },
+		debug = { M.current.debug, "boolean", true },
 		respect_gitignore = { M.current.respect_gitignore, "boolean", true },
 	})
 end
