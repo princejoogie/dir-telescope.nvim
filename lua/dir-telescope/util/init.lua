@@ -92,6 +92,7 @@ M.get_dirs = function(opts, fn)
 	local respect_gitignore = opts.respect_gitignore
 
 	if command == "fd" or command == "fdfind" then
+		find_command[#find_command + 1] = "--strip-cwd-prefix"
 		if hidden then
 			find_command[#find_command + 1] = "--hidden"
 		end
