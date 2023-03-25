@@ -63,6 +63,15 @@ M.get_dirs = function(opts, fn)
 	if opts.debug then
 		time.time_start("get_dirs")
 	end
+	local dir = vim.loop.cwd()
+	-- Set the dir
+	if opts.default_dir ~= "cwd" then
+		dir = opts.default_dir
+		-- This works on *nix
+		if dir == "~/" or dir == "$HOME" then
+			dir = os.getenv("HOME")
+		end
+	end
 
 	local find_command = (function()
 		if opts.find_command then
@@ -71,11 +80,11 @@ M.get_dirs = function(opts, fn)
 			end
 			return opts.find_command
 		elseif 1 == vim.fn.executable("fd") then
-			return { "fd", "--type", "d", "--color", "never" }
+			return { "fd", "--type", "d", "--color", "never", ".", dir }
 		elseif 1 == vim.fn.executable("fdfind") then
-			return { "fdfind", "--type", "d", "--color", "never" }
+			return { "fdfind", "--type", "d", "--color", "never", ".", dir }
 		elseif 1 == vim.fn.executable("find") and vim.fn.has("win32") == 0 then
-			return { "find", ".", "-type", "d" }
+			return { "find", ".", "-type", "d", dir }
 		end
 	end)()
 
