@@ -43,8 +43,8 @@ M.get_dirs = function(opts, fn)
 	local hidden = opts.hidden
 	local no_ignore = opts.no_ignore
 
-	if opts.repect_gitignore then
-		vim.notify("respect_gitignore is deprecated, use no_ignore instead", vim.log.levels.WARN)
+	if opts.respect_gitignore then
+		vim.notify("dir-telescope: respect_gitignore is deprecated, use no_ignore instead", vim.log.levels.ERROR)
 	end
 
 	if command == "fd" or command == "fdfind" or command == "rg" then
