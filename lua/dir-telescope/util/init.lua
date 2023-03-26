@@ -69,6 +69,14 @@ M.get_dirs = function(opts, fn)
 		vim.notify("dir-telescope: You need to install either find or fd/fdfind", vim.log.levels.ERROR)
 	end
 
+	local getPreviewer = function()
+		if opts.show_preview then
+			return conf.file_previewer(opts)
+		else
+			return nil
+		end
+	end
+
 	vim.fn.jobstart(find_command, {
 		stdout_buffered = true,
 		on_stdout = function(_, data)
@@ -77,7 +85,7 @@ M.get_dirs = function(opts, fn)
 					.new(opts, {
 						prompt_title = "Select a Directory",
 						finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
-						previewer = conf.file_previewer(opts),
+						previewer = getPreviewer(),
 						sorter = conf.file_sorter(opts),
 						attach_mappings = function(prompt_bufnr)
 							action_set.select:replace(function()

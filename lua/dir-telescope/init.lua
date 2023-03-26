@@ -7,6 +7,7 @@ local M = {}
 -- @param opts: table
 -- @param opts.hidden: boolean
 -- @param opts.no_ignore: boolean
+-- @param opts.show_preview: boolean
 -- @param opts.debug : boolean
 M.setup = function(opts)
 	if opts then
