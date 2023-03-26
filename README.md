@@ -16,7 +16,7 @@ use({
   config = function()
     require("dir-telescope").setup({
       hidden = true,
-      respect_gitignore = true,
+      no_ignore = false,
     })
   end,
 })
