@@ -42,6 +42,7 @@ M.get_dirs = function(opts, fn)
 	local command = find_command[1]
 	local hidden = opts.hidden
 	local no_ignore = opts.no_ignore
+	local follow_symlinks = opts.follow_symlinks
 
 	if opts.respect_gitignore then
 		vim.notify("dir-telescope: respect_gitignore is deprecated, use no_ignore instead", vim.log.levels.ERROR)
@@ -54,6 +55,9 @@ M.get_dirs = function(opts, fn)
 		if no_ignore then
 			find_command[#find_command + 1] = "--no-ignore"
 		end
+		if follow_symlinks then
+			find_command[#find_command + 1] = "--follow"
+		end
 	elseif command == "find" then
 		if not hidden then
 			table.insert(find_command, { "-not", "-path", "*/.*" })
@@ -64,6 +68,9 @@ M.get_dirs = function(opts, fn)
 				"The `no_ignore` key is not available for the `find` command in `get_dirs`.",
 				vim.log.levels.WARN
 			)
+		end
+		if follow_symlinks then
+			find_command[#find_command + 1] = "-follow"
 		end
 	else
 		vim.notify("dir-telescope: You need to install either find or fd/fdfind", vim.log.levels.ERROR)
