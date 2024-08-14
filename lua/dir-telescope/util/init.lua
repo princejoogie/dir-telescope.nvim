@@ -79,33 +79,37 @@ M.get_dirs = function(opts, fn)
 
 	vim.fn.jobstart(find_command, {
 		stdout_buffered = true,
-		on_stdout = function(_, data)
+		on_stdout = function(_, _data)
+			local data = vim.tbl_filter(function(str)
+				return not str:match("^%.git")
+			end, _data)
+
 			if data then
 				pickers
-					.new(opts, {
-						prompt_title = "Select a Directory",
-						finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
-						previewer = getPreviewer(),
-						sorter = conf.file_sorter(opts),
-						attach_mappings = function(prompt_bufnr)
-							action_set.select:replace(function()
-								local current_picker = action_state.get_current_picker(prompt_bufnr)
-								local dirs = {}
-								local selections = current_picker:get_multi_selection()
-								if vim.tbl_isempty(selections) then
-									table.insert(dirs, action_state.get_selected_entry().value)
-								else
-									for _, selection in ipairs(selections) do
-										table.insert(dirs, selection.value)
+						.new(opts, {
+							prompt_title = "Select a Directory",
+							finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
+							previewer = getPreviewer(),
+							sorter = conf.file_sorter(opts),
+							attach_mappings = function(prompt_bufnr)
+								action_set.select:replace(function()
+									local current_picker = action_state.get_current_picker(prompt_bufnr)
+									local dirs = {}
+									local selections = current_picker:get_multi_selection()
+									if vim.tbl_isempty(selections) then
+										table.insert(dirs, action_state.get_selected_entry().value)
+									else
+										for _, selection in ipairs(selections) do
+											table.insert(dirs, selection.value)
+										end
 									end
-								end
-								actions._close(prompt_bufnr, current_picker.initial_mode == "insert")
-								fn({ search_dirs = dirs })
-							end)
-							return true
-						end,
-					})
-					:find()
+									actions._close(prompt_bufnr, current_picker.initial_mode == "insert")
+									fn({ search_dirs = dirs })
+								end)
+								return true
+							end,
+						})
+						:find()
 
 				if opts.debug then
 					print("get_dirs took " .. time.time_end("get_dirs") .. " seconds")
