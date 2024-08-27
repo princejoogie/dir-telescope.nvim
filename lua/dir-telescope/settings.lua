@@ -1,3 +1,4 @@
+local builtin = require("telescope.builtin")
 local M = {}
 
 local DEFAULT_SETTINGS = {
@@ -6,6 +7,7 @@ local DEFAULT_SETTINGS = {
 	no_ignore = false,
 	show_preview = true,
 	follow_symlinks = false,
+	live_grep = builtin.live_grep,
 }
 
 M._DEFAULT_SETTINGS = DEFAULT_SETTINGS
