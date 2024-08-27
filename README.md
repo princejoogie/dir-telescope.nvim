@@ -19,6 +19,7 @@ use({
       hidden = true,
       no_ignore = false,
       show_preview = true,
+      follow_symlinks = false,
     })
   end,
 })
