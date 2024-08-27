@@ -5,6 +5,7 @@ local DEFAULT_SETTINGS = {
 	debug = false,
 	no_ignore = false,
 	show_preview = true,
+	follow_symlinks = false,
 }
 
 M._DEFAULT_SETTINGS = DEFAULT_SETTINGS
@@ -17,6 +18,7 @@ M.set = function(opts)
 		debug = { M.current.debug, "boolean" },
 		no_ignore = { M.current.no_ignore, "boolean" },
 		show_preview = { M.current.show_preview, "boolean" },
+		follow_symlinks = { M.current.follow_symlinks, "boolean" },
 	})
 end
 
